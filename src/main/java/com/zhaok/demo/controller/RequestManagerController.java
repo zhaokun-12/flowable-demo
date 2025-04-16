@@ -19,9 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 报销demoController
- *
- * @author puhaiyang
+ * RequestManagerController
  * @date 2018/12/19
  */
 @Controller
@@ -38,7 +36,7 @@ public class RequestManagerController {
 
 /***************此处为业务代码******************/
     /**
-     * 请假
+     * 需求上报
      *
      * @param apply   申请人
      * @param reqName     需求名称
@@ -58,7 +56,7 @@ public class RequestManagerController {
     }
 
     /**
-     * 修改需求信息
+     * 被驳回时，修改需求信息
      *
      * @param processId   流程id
      * @param reqName     需求名称
@@ -76,7 +74,7 @@ public class RequestManagerController {
     }
 
     /**
-     * 获取审批管理列表
+     * 获取用户的任务列表
      */
     @RequestMapping(value = "/list")
     @ResponseBody
@@ -125,7 +123,7 @@ public class RequestManagerController {
     }
 
     /**
-     * 需求沟通
+     * 需求表单
      *
      * @param hours 需要花费工时
      */
@@ -144,7 +142,7 @@ public class RequestManagerController {
     }
 
     /**
-     * 生成流程图
+     * 生成流程图，已结束的流程无法生成
      *
      * @param processId 任务ID
      */

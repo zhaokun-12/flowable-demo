@@ -3,24 +3,24 @@
     <process id="request_flow" name="需求生命周期" isExecutable="true">
         <documentation>需求生命周期简化版</documentation>
         <startEvent id="startEvent1" name="开始" flowable:formFieldValidation="true"></startEvent>
-        <userTask id="req_propose" name="需求归口人提出" flowable:assignee="${applyUser}" flowable:formFieldValidation="true">
+        <userTask id="req_propose" name="需求上报" flowable:assignee="${applyUser}" flowable:formFieldValidation="true">
             <extensionElements>
                 <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
             </extensionElements>
         </userTask>
         <sequenceFlow id="sid-769918D6-7E1F-4529-9DC8-077564D0B9C2" sourceRef="startEvent1" targetRef="req_propose"></sequenceFlow>
-        <userTask id="approved_by_approver" name="审批人审批" flowable:assignee="11" flowable:formFieldValidation="true">
+        <userTask id="approved_by_approver" name="指定人审批" flowable:assignee="11" flowable:formFieldValidation="true">
             <extensionElements>
                 <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
             </extensionElements>
         </userTask>
-        <userTask id="approved_by_manager" name="部室负责人审批" flowable:assignee="12" flowable:formFieldValidation="true">
+        <userTask id="approved_by_manager" name="领导审批" flowable:assignee="12" flowable:formFieldValidation="true">
             <extensionElements>
                 <flowable:taskListener event="assignment" class="com.zhaok.demo.handler.AutoTaskApproveListener"></flowable:taskListener>
                 <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
             </extensionElements>
         </userTask>
-        <userTask id="communicate" name="需求沟通" flowable:assignee="20" flowable:formFieldValidation="true">
+        <userTask id="communicate" name="需求表单" flowable:assignee="20" flowable:formFieldValidation="true">
             <extensionElements>
                 <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
             </extensionElements>
