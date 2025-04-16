@@ -10,9 +10,9 @@ spring:
 ###################  开发环境的profile  ###################
 ##########################################################
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/test
+    url: jdbc:mysql://127.0.0.1:3306/flowable_demo
     username: root
-    password: 123456
+    password: root123
 
 logging:
   level.root: info

@@ -25,8 +25,8 @@ import java.util.List;
  * @date 2018/12/19
  */
 @Controller
-@RequestMapping(value = "expense")
-public class ExpenseController {
+@RequestMapping(value = "request")
+public class RequestManagerController {
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
@@ -38,21 +38,41 @@ public class ExpenseController {
 
 /***************此处为业务代码******************/
     /**
-     * 添加报销
+     * 请假
      *
-     * @param userId    用户Id
-     * @param money     报销金额
-     * @param descption 描述
+     * @param apply   申请人
+     * @param reqName     需求名称
      */
-    @RequestMapping(value = "add")
+    @RequestMapping(value = "createRequest")
     @ResponseBody
-    public String addExpense(String userId, Integer money, String descption) {
+    public String addQingjia(String apply, String reqName) {
         //启动流程
         HashMap<String, Object> map = new HashMap<>();
-        map.put("taskUser", userId);
-        map.put("money", money);
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Expense", map);
-        return "提交成功.流程Id为：" + processInstance.getId();
+        map.put("applyUser", apply);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("request_flow", map);
+        // 创建流程自动完成第一个节点
+        map.put("reqName", reqName);
+        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
+        taskService.complete(task.getId(), map);
+        return "提交成功.需求的流程Id为：" + processInstance.getId();
+    }
+
+    /**
+     * 修改需求信息
+     *
+     * @param processId   流程id
+     * @param reqName     需求名称
+     */
+    @RequestMapping(value = "updateRequest")
+    @ResponseBody
+    public String updateQingjia(String processId, String reqName) {
+        //启动流程
+        HashMap<String, Object> map = new HashMap<>();
+        // 创建流程自动完成第一个节点
+        map.put("reqName", reqName);
+        Task task = taskService.createTaskQuery().taskAssignee("1").processInstanceId(processId).singleResult();
+        taskService.complete(task.getId(), map);
+        return "修改需求成功";
     }
 
     /**
@@ -82,7 +102,7 @@ public class ExpenseController {
         }
         //通过审核
         HashMap<String, Object> map = new HashMap<>();
-        map.put("outcome", "通过");
+        map.put("pass", "1");
         taskService.complete(taskId, map);
         return "processed ok!";
     }
@@ -93,10 +113,34 @@ public class ExpenseController {
     @ResponseBody
     @RequestMapping(value = "reject")
     public String reject(String taskId) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (task == null) {
+            throw new RuntimeException("流程不存在");
+        }
+        //拒绝审核
         HashMap<String, Object> map = new HashMap<>();
-        map.put("outcome", "驳回");
+        map.put("pass", "0");
         taskService.complete(taskId, map);
-        return "reject";
+        return "processed ok!";
+    }
+
+    /**
+     * 需求沟通
+     *
+     * @param hours 需要花费工时
+     */
+    @RequestMapping(value = "communicate")
+    @ResponseBody
+    public String communicate(String taskId, String hours) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (task == null) {
+            throw new RuntimeException("流程不存在");
+        }
+        //通过审核
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("hours", hours);
+        taskService.complete(taskId, map);
+        return "processed ok!";
     }
 
     /**
