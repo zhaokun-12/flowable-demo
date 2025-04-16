@@ -16,7 +16,7 @@
         </userTask>
         <userTask id="approved_by_manager" name="部室负责人审批" flowable:assignee="12" flowable:formFieldValidation="true">
             <extensionElements>
-                <flowable:taskListener event="assignment" class="com.haiyang.flowablespringboot.handler.AutoTaskApproveListener"></flowable:taskListener>
+                <flowable:taskListener event="assignment" class="com.zhaok.demo.handler.AutoTaskApproveListener"></flowable:taskListener>
                 <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
             </extensionElements>
         </userTask>
